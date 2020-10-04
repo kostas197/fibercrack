@@ -8,7 +8,9 @@ se puede utilizar de la siguiente forma:
 3) ejecutarlo con la siguiente sintaxis
 
 1er parametro, nombre de la red
+
 2do parametro, archivo.cap
+
 3ro parametro, comienzo número de DNI 25.XXX.XXX
 
 ./fibercrack.sh "Fiberxxxx2.4GHz"  "archivo.cap" "25"
