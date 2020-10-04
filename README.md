@@ -1,5 +1,5 @@
 # fibercrack
-este es un script para utilizar aircrack con passwords de 10 digitos
+este es un script para utilizar aircrack con passwords de 10 / 11 digitos
 
 se puede utilizar de la siguiente forma:
 
